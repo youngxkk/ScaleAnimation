@@ -12,6 +12,7 @@ class ViewController: UIViewController {
 
     let buttonn = UIButton()
     let time:TimeInterval = 1.0
+    
     var circle1:UIImageView = UIImageView()
     var circle2:UIImageView = UIImageView()
     var circle3:UIImageView = UIImageView()
@@ -32,6 +33,23 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //下面这个是头像
+        let img = UIImage(named: "head")
+        let head = UIImageView(image: img)
+        head.frame.size = CGSize(width: 120, height: 120)
+        //下面这句是填充为等比直充满
+        head.contentMode = .scaleAspectFill
+        //下面这句是设置遮罩
+        head.layer.masksToBounds = true
+        //下面这句设置为圆形
+        head.layer.cornerRadius = head.frame.width / 2
+        head.center.x = self.view.bounds.width / 2
+        head.center.y = self.view.bounds.height / 2
+//        head.layer.borderWidth = 4
+//        head.layer.borderColor = UIColor.white
+        self.view.addSubview(head)
+        
         
         //下面这个是蓝色的圆形
         self.circle1 = publicCircle()
@@ -58,8 +76,15 @@ class ViewController: UIViewController {
         buttonn.backgroundColor = UIColor.yellow
         buttonn.adjustsImageWhenHighlighted = false
         self.view.addSubview(buttonn)
+        buttonn.addTarget(self, action: #selector(highlightBg), for: .touchDown)
         buttonn.addTarget(self, action: #selector(click), for: .touchUpInside)
 
+
+        
+        //下面是高速图层顺序的
+        self.view.bringSubview(toFront: head)
+        self.view.sendSubview(toBack: self.circle1)
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -122,6 +147,11 @@ class ViewController: UIViewController {
         self.circle3.layer.add(animation3, forKey: "Image-expend")
         self.circle3.layer.add(animationOpacity, forKey: "Image-opacity")
         self.buttonn.layer.add(animation4, forKey: "Image-expend")
+    }
+
+    @objc func highlightBg() {
+        print("highlightBorder")
+//        buttonn.layer.backgroundColor = (UIColor.black as! CGColor)
     }
 
     //点击后执行循环
